@@ -1,2 +1,246 @@
 # Auto detect text files and perform LF normalization
-* text=auto
+#include <ESP8266WiFi.h>
+#include<ESP8266HTTPClient.h>
+#include <ESP8266WebServer.h>
+#include <Servo.h>
+
+
+
+Servo s1;
+Servo s2;
+
+Servo s3;
+Servo s4;
+Servo s5;
+
+
+const char *ssid = "Kismis";   // SSID of your WiFi hotspot
+const char* password = "12345678";  // Replace with your network password
+IPAddress ip(192, 168, 1, 1);       // Desired static IP address
+IPAddress gateway(192, 168, 1, 1);  // Your gateway/router IP
+IPAddress subnet(255, 255, 255, 0);
+ESP8266WebServer server(80);
+
+void setup() {
+  Serial.begin(115200);
+  
+  // Connect to WiFi
+  WiFi.softAP(ssid, password);
+   WiFi.softAPConfig(ip, gateway, subnet);
+ 
+  IPAddress IP = WiFi.softAPIP();
+  
+   Serial.println(" ");
+  Serial.print("Access Point IP address: ");
+  Serial.println(IP);
+   Serial.begin(115200);
+
+ 
+
+  s2.attach(14,700,2300); // D5
+ s5.attach(12,700,2300); // D6
+s1.attach(2,700,2300); // D4
+  s3.attach(5,700,2300); // D1
+  s4.attach(4,700,2300); // D2
+  
+  
+  server.on("/", HTTP_GET, []() {
+    server.send(200, "text/plain", "Hello, World!");
+    
+  });
+
+  
+ server.on("/fingerindexdown", HTTP_GET, []() {
+    // Trigger index finger function
+    triggerIndexFingerdown();
+    
+    server.send(200, "text/plain", "Index finger activated");
+  });
+  server.on("/fingerindexup", HTTP_GET, []() {
+    // Trigger index finger function
+    triggerIndexFingerup();
+    
+    server.send(200, "text/plain", "Index finger activated up");
+  });
+  server.on("/thumbsup", HTTP_GET, []() {
+    // Trigger thumbs up function
+    triggerThumbsUp();
+    server.send(200, "text/plain", "Thumbs up activated");
+  });
+   server.on("/thumbsdown", HTTP_GET, []() {
+    // Trigger thumbs up function
+    triggerThumbsdown();
+    server.send(200, "text/plain", "Thumbs down activated");
+  });
+
+  server.on("/fingermiddleup", HTTP_GET, []() {
+    // Trigger middle finger function
+    triggerMiddleFingerup();
+    server.send(200, "text/plain", "Middle finger activated");
+  });
+  server.on("/fingermiddledown", HTTP_GET, []() {
+    // Trigger middle finger function
+    triggerMiddleFingerdown();
+    server.send(200, "text/plain", "Middle finger down activated");
+  });
+ server.on("/fingerringup", HTTP_GET, []() {
+    // Trigger middle finger function
+    triggerringFingerup();
+    server.send(200, "text/plain", "ring finger activated");
+  });
+  server.on("/fingerringdown", HTTP_GET, []() {
+    // Trigger middle finger function
+    triggerringFingerdown();
+    server.send(200, "text/plain", "ring finger activated");
+  });
+
+  server.on("/fingerpinkyup", HTTP_GET, []() {
+    // Trigger middle finger function
+    triggerpinkyFingerup();
+    server.send(200, "text/plain", "pinky finger activated");
+  });
+
+  server.on("/fingerpinkydown", HTTP_GET, []() {
+    // Trigger middle finger function
+    triggerpinkyFingerup();
+    server.send(200, "text/plain", "pinky finger activated");
+  });
+
+  server.on("/fingerallclose", HTTP_GET, []() {
+    // Trigger middle finger function
+   allclose();
+    server.send(200, "text/plain", "all close activated");
+  });
+   server.on("/fingerallup", HTTP_GET, []() {
+    // Trigger middle finger function
+   allup();
+    server.send(200, "text/plain", "all close activated");
+  });
+  server.begin();
+}
+
+void loop() {
+  server.handleClient();
+}
+
+
+
+
+
+
+// Define functions for each finger gesture
+void triggerIndexFingerup() {
+  Serial.println("Index finger gesture activated");
+  s1.write(0);
+   Serial.println("Servo 0:");
+
+  // Add your code to perform actions for index finger gesture
+}
+void triggerIndexFingerdown() {
+  Serial.println("Index finger gesture activated up");
+
+
+  s1.write(180);
+  // Add your code to perform actions for index finger gesture
+}
+
+void triggerThumbsUp() {
+  Serial.println("Thumbs up gesture activated");
+   s5.write(0);
+    Serial.println("Servo 0:");
+  
+  
+  // Add your code to perform actions for thumbs up gesture
+}
+void triggerThumbsdown() {
+  Serial.println("Thumbs down gesture activated");
+  
+
+   s5.write(180);
+  // Add your code to perform actions for thumbs up gesture
+}
+
+void triggerMiddleFingerup() {
+  Serial.println("Middle finger gesture activated");
+  
+     s2.write(0);
+  Serial.println("Servo 0:");
+   
+  // Add your code to perform actions for middle finger gesture
+}
+
+
+void triggerMiddleFingerdown() {
+  Serial.println("Middle finger gesture activated");
+  
+  
+  
+  s2.write(180);
+  // Add your code to perform actions for middle finger gesture
+}
+void triggerringFingerup() {
+  Serial.println("ring finger gesture activated");
+  
+  
+  s3.write(0);
+  // Add your code to perform actions for middle finger gesture
+}
+void triggerringFingerdown() {
+  Serial.println("ring finger gesture activated");
+  
+  
+
+  s3.write(180);
+  // Add your code to perform actions for middle finger gesture
+}
+void triggerpinkyFingerdown() {
+  Serial.println("Middle finger gesture activated");
+  
+  
+  
+  s4.write(180);
+  // Add your code to perform actions for middle finger gesture
+}
+void triggerpinkyFingerup() {
+  Serial.println("Middle finger gesture activated");
+  
+  
+
+  s4.write(0);
+  // Add your code to perform actions for middle finger gesture
+}
+
+void allclose() {
+  Serial.println(" gesture activated");
+  
+  
+  delay(200);
+  s1.write(180);
+  delay(1000);
+  
+  s3.write(180);
+  delay(1000);
+  s4.write(180);
+
+ 
+  
+  // Add your code to perform actions for middle finger gesture
+}
+
+void allup() {
+  Serial.println(" gesture activated");
+  
+  
+  delay(200);
+  s1.write(0);
+delay(1000);
+s2.write(0);
+  delay(1000);
+  s3.write(0);
+  delay(1000);
+  s4.write(0);
+delay(1000);
+ s5.write(0);
+  
+  // Add your code to perform actions for middle finger gesture
+}
